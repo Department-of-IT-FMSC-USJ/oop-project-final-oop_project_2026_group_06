@@ -1,0 +1,282 @@
+@model BusinessRegistrationSystem.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Command Center";
+}
+
+<div class="command-center-header mb-5">
+    <div class="row align-items-center">
+        <div class="col-md-7">
+            <span class="badge bg-soft-primary text-primary px-3 py-2 mb-3 rounded-pill fw-700 small uppercase" style="letter-spacing: 0.1em;">
+                <i class="bi bi-cpu-fill me-2"></i> System Active
+            </span>
+            <h1 class="display-5 fw-800 mb-2">Hello, @Model.User.Username</h1>
+            <p class="text-muted lead fw-500">Welcome to your secure business management console.</p>
+        </div>
+        <div class="col-md-5 text-md-end mt-4 mt-md-0">
+            <div class="d-inline-flex gap-2">
+                <div class="stat-pill">
+                    <span class="stat-label">Role</span>
+                    <span class="stat-value">@Model.User.Role</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="stat-label">Applications</span>
+                    <span class="stat-value">@Model.Registrations.Count</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- User Profile & Quick Actions -->
+    <div class="col-lg-4">
+        <div class="world-class-card p-5 h-100 d-flex flex-column">
+            <div class="d-flex align-items-center mb-5">
+                <div class="avatar-circle me-4">
+                    <span>@Model.User.Username[0].ToString().ToUpper()</span>
+                </div>
+                <div>
+                    <h3 class="h5 fw-800 mb-1">Account Entity</h3>
+                    <p class="small text-muted mb-0">Official Registered User</p>
+                </div>
+            </div>
+
+            <h4 class="small fw-800 text-muted uppercase mb-4" style="letter-spacing: 0.1em;">Quick Actions</h4>
+            
+            <div class="list-group list-group-flush mb-auto">
+                <a href="#" class="quick-link-item">
+                    <div class="icon-sq bg-soft-blue"><i class="bi bi-person-gear"></i></div>
+                    <div class="ms-3">
+                        <div class="fw-700 small">Account Settings</div>
+                        <div class="text-muted smaller">Manage your profile</div>
+                    </div>
+                    <i class="bi bi-chevron-right ms-auto opacity-50"></i>
+                </a>
+                <a asp-controller="Business" asp-action="SearchName" class="quick-link-item">
+                    <div class="icon-sq bg-soft-green"><i class="bi bi-plus-circle"></i></div>
+                    <div class="ms-3">
+                        <div class="fw-700 small">New Registration</div>
+                        <div class="text-muted smaller">Start a name search</div>
+                    </div>
+                    <i class="bi bi-chevron-right ms-auto opacity-50"></i>
+                </a>
+                <a href="#" class="quick-link-item">
+                    <div class="icon-sq bg-soft-orange"><i class="bi bi-bell"></i></div>
+                    <div class="ms-3">
+                        <div class="fw-700 small">Notifications</div>
+                        <div class="text-muted smaller">System alerts and updates</div>
+                    </div>
+                    <i class="bi bi-chevron-right ms-auto opacity-50"></i>
+                </a>
+            </div>
+
+            <div class="mt-5 pt-4 border-top">
+                <form asp-controller="Auth" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-link w-100 text-danger text-decoration-none fw-700 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-box-arrow-right me-2"></i> Secure Sign Out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content: Applications List -->
+    <div class="col-lg-8">
+        <div class="world-class-card h-100 overflow-hidden d-flex flex-column">
+            <div class="p-5 border-bottom d-flex justify-content-between align-items-center">
+                <h2 class="h4 fw-800 mb-0">Recent Applications</h2>
+                <a asp-controller="Business" asp-action="SearchName" class="btn btn-premium btn-sm">
+                    <i class="bi bi-plus-lg me-1"></i> New Application
+                </a>
+            </div>
+            
+            <div class="flex-grow-1">
+                @if (!Model.Registrations.Any())
+                {
+                    <div class="p-5 text-center py-5">
+                        <div class="icon-sq bg-soft-blue mx-auto mb-4" style="width: 80px; height: 80px; font-size: 2.5rem;">
+                            <i class="bi bi-folder2-open text-primary"></i>
+                        </div>
+                        <h4 class="fw-800 mb-2">No Applications Found</h4>
+                        <p class="text-muted mb-4 px-lg-5">You haven't submitted any business name reservations yet. Your registration journey starts with a name search.</p>
+                        <a asp-controller="Business" asp-action="SearchName" class="btn btn-premium px-4">
+                            Start Your First Search
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4 py-3 small fw-800 text-muted uppercase">Business Name</th>
+                                    <th class="py-3 small fw-800 text-muted uppercase">Submitted</th>
+                                    <th class="pe-4 py-3 text-end small fw-800 text-muted uppercase">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var reg in Model.Registrations)
+                                {
+                                    <tr>
+                                        <td class="ps-4 py-4">
+                                            <div class="fw-800" style="color: var(--apple-text);">@reg.ReservationName.ToUpper()</div>
+                                            <div class="smaller text-muted fw-600 uppercase">ID: @reg.Id.ToString().Substring(0, 8)</div>
+                                        </td>
+                                        <td class="py-4">
+                                            <div class="fw-600 small" style="color: var(--apple-text);">@reg.SubmittedAt.ToString("MMM dd, yyyy")</div>
+                                            <div class="smaller text-muted">@reg.SubmittedAt.ToString("hh:mm tt")</div>
+                                        </td>
+                                        <td class="pe-4 py-4 text-end">
+                                            @if (reg.Status == "Pending")
+                                            {
+                                                <span class="badge rounded-pill bg-soft-orange text-orange px-3 py-2 fw-700">
+                                                    <i class="bi bi-clock-history me-1"></i> Pending
+                                                </span>
+                                            }
+                                            else if (reg.Status == "Approved")
+                                            {
+                                                <span class="badge rounded-pill bg-soft-green text-success px-3 py-2 fw-700">
+                                                    <i class="bi bi-check-circle me-1"></i> Approved
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge rounded-pill bg-soft-red text-danger px-3 py-2 fw-700">
+                                                    <i class="bi bi-x-circle me-1"></i> Rejected
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --brand-primary: #0f172a;
+        --brand-accent: #3b82f6;
+        --border-light: #e2e8f0;
+        --premium-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+        --apple-text: #1d1d1f;
+    }
+    
+    .fw-800 { font-weight: 800; }
+    .fw-700 { font-weight: 700; }
+    .fw-600 { font-weight: 600; }
+    .fw-500 { font-weight: 500; }
+    .bg-soft-primary { background: rgba(59, 130, 246, 0.1); }
+    
+    .stat-pill {
+        background: white;
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        padding: 0.8rem 1.4rem;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        box-shadow: var(--premium-shadow);
+        min-width: 140px;
+        text-align: left;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+        font-weight: 800;
+        color: var(--brand-primary);
+        font-size: 1.1rem;
+    }
+
+    .avatar-circle {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--brand-primary) 0%, #334155 100%);
+        color: white;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 800;
+        box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
+    }
+
+    .quick-link-item {
+        display: flex;
+        align-items: center;
+        padding: 1.2rem 0;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .quick-link-item:hover {
+        transform: translateX(8px);
+        color: var(--brand-accent);
+    }
+
+    .icon-sq {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .bg-soft-blue { background: #eff6ff; color: #3b82f6; }
+    .bg-soft-green { background: #ecfdf5; color: #10b981; }
+    .bg-soft-orange { background: #fff7ed; color: #f97316; }
+    .bg-soft-red { background: #fef2f2; color: #ef4444; }
+
+    .text-orange { color: #f97316; }
+    .smaller { font-size: 0.75rem; }
+    .uppercase { text-transform: uppercase; }
+
+    .table thead th {
+        border-bottom: 1px solid var(--border-light);
+        letter-spacing: 0.05em;
+        background: #f8fafc;
+    }
+    
+    .table tbody tr:hover {
+        background-color: rgba(59, 130, 246, 0.02);
+    }
+
+    .dropdown-item:active {
+        background-color: var(--brand-accent);
+    }
+
+    .shadow-premium {
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-premium {
+        background: var(--brand-primary);
+        color: white !important;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s;
+    }
+
+    .btn-premium:hover {
+        background: #1e293b;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+</style>
