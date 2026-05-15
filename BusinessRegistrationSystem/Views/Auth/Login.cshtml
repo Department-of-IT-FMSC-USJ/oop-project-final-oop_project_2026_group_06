@@ -1,0 +1,152 @@
+@model BusinessRegistrationSystem.Models.User
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-6 col-lg-5 col-xl-4">
+        <div class="world-class-card p-5">
+            <div class="text-center mb-5">
+                <div class="d-inline-flex align-items-center justify-content-center mb-4" 
+                     style="width: 64px; height: 64px; background: rgba(59, 130, 246, 0.1); border-radius: 16px;">
+                    <i class="bi bi-shield-lock-fill text-primary" style="font-size: 1.8rem;"></i>
+                </div>
+                <h1 class="h2 fw-800 mb-2">Welcome Back</h1>
+                <p class="text-muted">Sign in to your official BR account</p>
+            </div>
+            
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-premium-error mb-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> @ViewBag.Error
+                </div>
+            }
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert-premium-success mb-4">
+                    <i class="bi bi-check-circle-fill me-2"></i> @ViewBag.Message
+                </div>
+            }
+
+            <form asp-action="Login" method="post" class="auth-form">
+                <div class="form-group-premium mb-4">
+                    <label for="username" class="premium-label">Username</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" id="username" name="username" class="premium-input" placeholder="e.g. janesmith" required />
+                    </div>
+                </div>
+
+                <div class="form-group-premium mb-5">
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <label for="password" class="premium-label">Password</label>
+                        <a href="#" class="small text-accent text-decoration-none fw-600">Forgot?</a>
+                    </div>
+                    <div class="input-wrapper">
+                        <i class="bi bi-key input-icon"></i>
+                        <input type="password" id="password" name="password" class="premium-input" placeholder="••••••••" required />
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-premium w-100 py-3 mb-4">
+                    <span>Sign In</span>
+                    <i class="bi bi-arrow-right ms-2 mt-1"></i>
+                </button>
+
+                <div class="text-center">
+                    <span class="text-muted small">New to Online BR?</span>
+                    <a asp-action="Register" class="text-primary text-decoration-none fw-700 small ms-2">Create an account</a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="mt-5 d-flex justify-content-center gap-4 small text-muted opacity-50 fw-600 uppercase" style="letter-spacing: 0.1em; font-size: 0.7rem;">
+            <span>Government Portal</span>
+            <span>&bull;</span>
+            <span>ROC Verified</span>
+            <span>&bull;</span>
+            <span>Secure Connection</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fw-800 { font-weight: 800; }
+    .fw-700 { font-weight: 700; }
+    .fw-600 { font-weight: 600; }
+    .text-accent { color: var(--brand-accent); }
+
+    .alert-premium-error {
+        background: #fef2f2;
+        border: 1px solid #fee2e2;
+        color: #b91c1c;
+        padding: 1rem 1.2rem;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .alert-premium-success {
+        background: #ecfdf5;
+        border: 1px solid #d1fae5;
+        color: #047857;
+        padding: 1rem 1.2rem;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .form-group-premium .premium-label {
+        display: block;
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+        color: var(--brand-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 1.1rem;
+    }
+
+    .premium-input {
+        width: 100%;
+        background: #f1f5f9;
+        border: 2px solid transparent;
+        border-radius: 14px;
+        padding: 0.9rem 1.2rem 0.9rem 3.2rem;
+        font-weight: 500;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--brand-primary);
+    }
+
+    .premium-input:focus {
+        background: #fff;
+        border-color: var(--brand-accent);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .premium-input::placeholder {
+        color: #94a3b8;
+        font-weight: 400;
+    }
+
+    .btn-premium {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+</style>
