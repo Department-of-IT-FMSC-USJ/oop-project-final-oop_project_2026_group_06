@@ -53,7 +53,10 @@ TemporaryDependencyNodeTargetIdentifier=net9.0
 /warnaserror+:NU1605,SYSLIB0011
 
 [sourceFiles]
-Controllers/HomeController.cs
+Controllers/
+ AuthController.cs
+ HomeController.cs
+Data/AppDbContext.cs
 Models/
  ErrorViewModel.cs
  User.cs
@@ -64,6 +67,9 @@ obj/Debug/net9.0/
  BusinessRegistrationSystem.GlobalUsings.g.cs
  BusinessRegistrationSystem.RazorAssemblyInfo.cs
 Program.cs
+Services/
+ AuthService.cs
+ IAuthService.cs
 
 [metadataReferences]
 <DOTNET>/packs/Microsoft.AspNetCore.App.Ref/9.0.13/ref/net9.0/
