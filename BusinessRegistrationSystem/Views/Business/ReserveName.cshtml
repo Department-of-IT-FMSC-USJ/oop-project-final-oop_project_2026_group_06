@@ -1,0 +1,1366 @@
+﻿@model BusinessRegistrationSystem.Models.BusinessRegistration
+@{
+    ViewData["Title"] = "Reserve Business Name";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="text-center mb-5">
+                <span class="badge bg-soft-primary text-primary px-3 py-2 mb-3 rounded-pill fw-700 small uppercase" style="letter-spacing: 0.1em;">
+                    Step 02 &bull; Identity Details
+                </span>
+                <h1 class="display-6 fw-800 mb-3">Identity Registration</h1>
+                <p class="text-muted lead fw-500">Provide the official multilingual details for your new business identity.</p>
+            </div>
+
+            <div class="world-class-card p-5">
+                <form asp-action="ReserveName" method="post" id="registrationForm" novalidate>
+                    <input type="hidden" name="ReservationName" value="@Model.ReservationName" />
+                    
+                    <div class="row mb-4 pb-4 border-bottom">
+                        <div class="col-md-12">
+                            <h5 class="small fw-800 text-muted uppercase mb-2">Reservation Name</h5>
+                            <div class="h4 fw-800" style="color: var(--brand-primary);">@(Model.ReservationName?.ToUpper())</div>
+                        </div>
+                    </div>
+
+                    <!-- Step Progress Indicator -->
+                    <div class="mb-5" id="stepProgressBar">
+                        <div class="d-flex align-items-center justify-content-between mb-2" id="stepLabels">
+                        </div>
+                        <div class="progress" style="height: 6px; border-radius: 99px; background: #e2e8f0;">
+                            <div class="progress-bar" id="progressFill" role="progressbar" style="background: var(--brand-accent); border-radius: 99px; transition: width 0.4s ease; width: 12.5%;"></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="small fw-700" id="stepCounter" style="color: var(--brand-accent);">Step 1 of 8</span>
+                            <span class="small text-muted fw-600" id="stepTitle">Multilingual Identity</span>
+                        </div>
+                    </div>
+
+                    <!-- STEP 1: Name Details -->
+                    <div class="form-step active" id="step-1">
+                        <h4 class="h5 fw-800 mb-4" style="color: var(--brand-primary);">Step 1: Multilingual Identity</h4>
+                        
+                        <div class="form-group-premium mb-4">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <label for="SinhalaName" class="premium-label">Sinhala Name (Optional)</label>
+                                <span class="smaller text-muted opacity-50 fw-600">Press space after each word</span>
+                            </div>
+                            <div class="input-wrapper">
+                                <i class="bi bi-translate input-icon"></i>
+                                <input type="text" id="SinhalaName" name="SinhalaName" class="premium-input" placeholder="සිංහල නම ඇතුළත් කරන්න" />
+                            </div>
+                        </div>
+
+                        <div class="form-group-premium mb-4">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <label for="TamilName" class="premium-label">Tamil Name (Optional)</label>
+                                <span class="smaller text-muted opacity-50 fw-600">Press space after each word</span>
+                            </div>
+                            <div class="input-wrapper">
+                                <i class="bi bi-translate input-icon"></i>
+                                <input type="text" id="TamilName" name="TamilName" class="premium-input" placeholder="தமிழ் பெயரை உள்ளிடவும்" />
+                            </div>
+                        </div>
+
+                        <div class="form-group-premium mb-5">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <label for="Abbreviations" class="premium-label">Abbreviations / Trading Names</label>
+                                <span class="smaller text-muted opacity-50 fw-600">Max 250 characters</span>
+                            </div>
+                            <div class="input-wrapper">
+                                <i class="bi bi-body-text input-icon"></i>
+                                <textarea id="Abbreviations" name="Abbreviations" class="premium-input" style="height: 120px; padding-top: 1rem;"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 rounded-4 mb-5" style="background: #f8fafc; border: 1px solid var(--border-light);">
+                            <div class="form-check d-flex align-items-start gap-3">
+                                <input class="form-check-input mt-1" type="checkbox" id="consent" required style="width: 20px; height: 20px;">
+                                <label class="form-check-label small text-muted lh-base" for="consent">
+                                    I authorize an officer from the office of the Registrar of Companies to make the said search on my behalf and I do hereby expressly declare that I absolve the Registrar General of Companies and every officer of his Department from responsibility for any act or omission of the said officer in regard to such search or any information that may be given or omitted to be given by him to me.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Company Address -->
+                    <div class="form-step" id="step-2">
+                        <h4 class="h5 fw-800 mb-4" style="color: var(--brand-primary);">Step 2: Company Address</h4>
+
+                        <div class="form-group-premium mb-4">
+                            <label for="Address" class="premium-label">Company Address</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-geo-alt input-icon"></i>
+                                <input type="text" id="Address" name="Address" class="premium-input" required />
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group-premium mb-4 position-relative">
+                                    <label for="DistrictSearch" class="premium-label">District</label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="DistrictSearch" class="premium-input" placeholder="Search or select District..." autocomplete="off" style="padding-right: 3rem;" />
+                                        <i class="bi bi-chevron-down dropdown-arrow-icon" id="toggleDistricts" style="display: block !important;"></i>
+                                        <ul class="dropdown-menu-custom d-none shadow-premium" id="DistrictOptions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 12px; z-index: 1000; margin-top: 6px; max-height: 220px; overflow-y: auto; padding: 4px;"></ul>
+                                        <input type="hidden" id="District" name="District" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-premium mb-4">
+                                    <label for="DivisionalSecretariatDivision" class="premium-label">Divisional Secretariat Division</label>
+                                    <div class="input-wrapper">
+                                        <i class="bi bi-building input-icon"></i>
+                                        <input type="text" id="DivisionalSecretariatDivision" name="DivisionalSecretariatDivision" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group-premium mb-4">
+                                    <label for="GNDivision" class="premium-label">GN Division</label>
+                                    <div class="input-wrapper">
+                                        <i class="bi bi-compass input-icon"></i>
+                                        <input type="text" id="GNDivision" name="GNDivision" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-premium mb-4">
+                                    <label for="PostalCode" class="premium-label">Postal Code</label>
+                                    <div class="input-wrapper">
+                                        <i class="bi bi-mailbox input-icon"></i>
+                                        <input type="text" id="PostalCode" name="PostalCode" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: Company Contact -->
+                    <div class="form-step" id="step-3">
+                        <h4 class="h5 fw-800 mb-4" style="color: var(--brand-primary);">Step 3: Company Contact</h4>
+
+                        <div class="form-group-premium mb-4">
+                            <label for="CompanyEmail" class="premium-label">Company Email</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-envelope input-icon"></i>
+                                <input type="email" id="CompanyEmail" name="CompanyEmail" class="premium-input" placeholder="e.g. contact@company.com" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group-premium mb-4">
+                            <label for="CompanyPhoneNumber" class="premium-label">Company Phone Number</label>
+                            <div class="input-wrapper">
+                                <i class="bi bi-telephone input-icon"></i>
+                                <input type="tel" id="CompanyPhoneNumber" name="CompanyPhoneNumber" class="premium-input" placeholder="e.g. +94 11 234 5678" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: Company Objectives -->
+                    <div class="form-step" id="step-4">
+                        <h4 class="h5 fw-800 mb-4" style="color: var(--brand-primary);">Step 4: Company Objectives</h4>
+
+                        <div class="form-group-premium mb-4">
+                            <label class="premium-label">Main Business Objectives</label>
+                            <div class="d-flex flex-column flex-sm-row gap-2 mb-3">
+                                <textarea id="ObjectiveInput" class="premium-input" placeholder="Type a business objective and press Enter..." style="flex: 1; height: 80px; padding-top: 1rem;"></textarea>
+                                <button type="button" class="btn btn-premium px-4" id="addObjectiveBtn" style="height: 80px; display: flex; align-items: center; justify-content: center;">Add</button>
+                            </div>
+                            
+                            <ul class="objectives-list" id="objectivesList" style="padding-left: 0; display: flex; flex-direction: column; gap: 10px;">
+                                <!-- Dynamic items loaded here -->
+                            </ul>
+                            
+                            <textarea id="Objectives" name="Objectives" class="d-none" required></textarea>
+                        </div>
+
+                        <div class="form-group-premium mb-4">
+                            <label for="NatureOfBusiness" class="premium-label">Nature of Business</label>
+                            <p class="text-muted small mb-2">Briefly describe what the company does, how it operates, and its purpose.</p>
+                            <div class="input-wrapper">
+                                <textarea id="NatureOfBusiness" name="NatureOfBusiness" class="premium-input" style="height: 120px; padding-top: 1rem;" placeholder="e.g. A social-impact driven enterprise engaged in the development, branding, promotion, and retail of..." required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 5: Directors -->
+                    <div class="form-step" id="step-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-warning px-3" id="addSampleDirectorBtn">
+                                    <i class="bi bi-lightbulb-fill me-1"></i> Add Sample
+                                </button>
+                                <button type="button" class="btn btn-sm btn-premium px-3" id="addDirectorBtn">
+                                    <i class="bi bi-plus-lg me-1"></i> Add Director
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="directorsList" style="display: flex; flex-direction: column; gap: 20px;">
+                            <!-- Dynamic directors will be added here -->
+                        </div>
+                    </div>
+
+                    <!-- Template for Director Item -->
+                    <template id="directorTemplate">
+                        <div class="director-card p-4 mb-3" style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 16px; position: relative; animation: fadeIn 0.3s ease-out;">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                                <h5 class="h6 fw-800 mb-0 director-title" style="color: var(--brand-primary);">Director #NUMBER</h5>
+                                <button type="button" class="btn btn-sm btn-outline-danger remove-director-btn" style="border-radius: 8px; padding: 4px 8px;">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </div>
+                            
+                            <input type="hidden" name="Directors.Index" value="INDEX" />
+
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">NIC</label>
+                                        <input type="text" name="Directors[INDEX].NIC" class="premium-input" required placeholder="e.g. 199012345678" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Title</label>
+                                        <select name="Directors[INDEX].Title" class="premium-input" required>
+                                            <option value="">Select...</option>
+                                            <option value="Mr">Mr</option>
+                                            <option value="Mrs">Mrs</option>
+                                            <option value="Miss">Miss</option>
+                                            <option value="Dr">Dr</option>
+                                            <option value="Prof">Prof</option>
+                                            <option value="Rev">Rev</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">First Names</label>
+                                        <input type="text" name="Directors[INDEX].FirstNames" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Surname</label>
+                                        <input type="text" name="Directors[INDEX].Surname" class="premium-input" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Date of Birth</label>
+                                        <input type="date" name="Directors[INDEX].DateOfBirth" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">District</label>
+                                        <input type="text" name="Directors[INDEX].District" class="premium-input" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Divisional Secretariat</label>
+                                        <input type="text" name="Directors[INDEX].DivisionalSecretariatDivision" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-premium mt-3">
+                                <label class="premium-label">Address</label>
+                                <input type="text" name="Directors[INDEX].Address" class="premium-input" required />
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-4">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Postal Code</label>
+                                        <input type="text" name="Directors[INDEX].PostalCode" class="premium-input" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Residence Phone</label>
+                                        <input type="tel" name="Directors[INDEX].ResidencePhoneNumber" class="premium-input" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Mobile Number</label>
+                                        <input type="tel" name="Directors[INDEX].MobileNumber" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Email Address</label>
+                                        <input type="email" name="Directors[INDEX].EmailAddress" class="premium-input" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Occupation</label>
+                                        <input type="text" name="Directors[INDEX].Occupation" class="premium-input" required />
+                                    </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Template for Non-Director Shareholder -->
+                    <template id="shareholderTemplate">
+                        <div class="shareholder-card p-4 mb-3" style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 16px; position: relative; animation: fadeIn 0.3s ease-out;">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                                <h5 class="h6 fw-800 mb-0 shareholder-title" style="color: var(--brand-primary);">Shareholder #NUMBER</h5>
+                                <button type="button" class="btn btn-sm btn-outline-danger remove-shareholder-btn" style="border-radius: 8px; padding: 4px 8px;">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </div>
+                            
+                            <input type="hidden" name="Shareholders.Index" value="INDEX" />
+
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">NIC</label>
+                                        <input type="text" name="Shareholders[INDEX].NIC" class="premium-input" required placeholder="e.g. 199012345678" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Title</label>
+                                        <select name="Shareholders[INDEX].Title" class="premium-input" required>
+                                            <option value="">Select...</option>
+                                            <option value="Mr">Mr</option>
+                                            <option value="Mrs">Mrs</option>
+                                            <option value="Miss">Miss</option>
+                                            <option value="Dr">Dr</option>
+                                            <option value="Prof">Prof</option>
+                                            <option value="Rev">Rev</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">First Names</label>
+                                        <input type="text" name="Shareholders[INDEX].FirstNames" class="premium-input" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Surname</label>
+                                        <input type="text" name="Shareholders[INDEX].Surname" class="premium-input" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Number of Shares</label>
+                                        <input type="number" name="Shareholders[INDEX].NumberOfShares" class="premium-input" required min="1" placeholder="e.g. 100" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-12">
+                                    <div class="form-group-premium">
+                                        <label class="premium-label">Address</label>
+                                        <textarea name="Shareholders[INDEX].Address" class="premium-input" required style="height: 60px;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Step 6: Shareholders & Capital -->
+                    <div class="form-step" id="step-6">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="step-indicator-badge me-3">6</div>
+                            <h4 class="h5 fw-800 mb-0" style="color: var(--brand-primary);">Shareholders & Capital Information</h4>
+                        </div>
+
+                        <div class="world-class-card p-4 mb-4">
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="makeDirectorsShareholders" style="width: 40px; height: 20px;">
+                                <label class="form-check-label fw-800 ms-2" for="makeDirectorsShareholders" style="color: var(--brand-primary);">Make directors shareholders too?</label>
+                            </div>
+
+                            <div id="directorsShareAllocation" class="d-none">
+                                <h6 class="fw-800 mb-3" style="color: var(--brand-accent);">Director Share Allocation</h6>
+                                <div id="directorsShareList" class="d-flex flex-column gap-3">
+                                    <!-- Dynamic list of added directors populated via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="world-class-card p-4 mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-800 mb-0" style="color: var(--brand-accent);">Non-Director Shareholders (Optional)</h6>
+                                <button type="button" class="btn btn-outline-primary shadow-sm" onclick="addShareholder()" style="border-radius: 10px; font-weight: 700;">
+                                    <i class="bi bi-person-plus-fill me-2"></i> Add Shareholder
+                                </button>
+                            </div>
+                            <div id="shareholdersList" style="display: flex; flex-direction: column; gap: 20px;">
+                                <!-- Dynamic shareholders will be added here -->
+                            </div>
+                        </div>
+
+                        <div class="world-class-card p-4">
+                            <div class="form-group-premium">
+                                <label class="premium-label" for="TotalCapital">Total Capital of Company (LKR)</label>
+                                <input type="number" id="TotalCapital" name="TotalCapital" class="premium-input" placeholder="e.g. 1000000" step="0.01" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 7: Secretary Information -->
+                    <div class="form-step" id="step-7">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="step-indicator-badge me-3">7</div>
+                            <h4 class="h5 fw-800 mb-0" style="color: var(--brand-primary);">Secretary Information</h4>
+                        </div>
+                        
+                        <div class="world-class-card p-4 mb-4">
+                            <h6 class="fw-800 mb-4" style="color: var(--brand-accent);">Select Company Secretary Setup</h6>
+                            
+                            <div class="d-flex flex-column gap-3 mb-4">
+                                <!-- Option 1: OnlineBR -->
+                                <label class="secretary-option-card premium-radio-label active" id="label-onlinebr" style="cursor: pointer; border: 2px solid var(--brand-primary); background: #f0fdf4; border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease;">
+                                    <div class="form-check d-flex align-items-center">
+                                        <input class="form-check-input secretary-type-radio" type="radio" name="Secretary.SecretaryType" id="secOnlineBR" value="OnlineBR" checked style="transform: scale(1.3); margin-top: 0;">
+                                        <div class="ms-3">
+                                            <h6 class="fw-800 mb-1" style="color: #0f172a;">Use Online BR as my secretary firm</h6>
+                                            <p class="text-muted small mb-0">We will handle all your statutory secretarial requirements professionally.</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <!-- Option 2: Someone Else -->
+                                <label class="secretary-option-card premium-radio-label" id="label-someoneelse" style="cursor: pointer; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease;">
+                                    <div class="form-check d-flex align-items-center">
+                                        <input class="form-check-input secretary-type-radio" type="radio" name="Secretary.SecretaryType" id="secOther" value="Other" style="transform: scale(1.3); margin-top: 0;">
+                                        <div class="ms-3">
+                                            <h6 class="fw-800 mb-1" style="color: #0f172a;">I need someone else</h6>
+                                            <p class="text-muted small mb-0">Provide details of your appointed company secretary.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Custom Secretary Fields (Hidden by default) -->
+                            <div id="customSecretaryFields" style="display: none; animation: fadeIn 0.3s ease-in-out;" class="mt-4 pt-4 border-top">
+                                <h6 class="fw-800 mb-3" style="color: var(--brand-secondary);">Appointed Secretary Details</h6>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">NIC</label>
+                                            <input type="text" name="Secretary.NIC" class="premium-input sec-field" placeholder="e.g. 199012345678" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">Title</label>
+                                            <select name="Secretary.Title" class="premium-input sec-field">
+                                                <option value="">Select...</option>
+                                                <option value="Mr">Mr</option>
+                                                <option value="Mrs">Mrs</option>
+                                                <option value="Miss">Miss</option>
+                                                <option value="Rev">Rev</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">First Names</label>
+                                            <input type="text" name="Secretary.FirstNames" class="premium-input sec-field" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-6">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">Surname</label>
+                                            <input type="text" name="Secretary.Surname" class="premium-input sec-field" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">Phone Number</label>
+                                            <input type="text" name="Secretary.PhoneNumber" class="premium-input sec-field" placeholder="e.g. 0771234567" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-6">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">Email Address</label>
+                                            <input type="email" name="Secretary.Email" class="premium-input sec-field" placeholder="e.g. name@example.com" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">Postal Code</label>
+                                            <input type="text" name="Secretary.PostalCode" class="premium-input sec-field" placeholder="e.g. 00100" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mt-1">
+                                    <div class="col-md-12">
+                                        <div class="form-group-premium">
+                                            <label class="premium-label">Address</label>
+                                            <textarea name="Secretary.Address" class="premium-input sec-field" style="height: 60px;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const radios = document.querySelectorAll('.secretary-type-radio');
+                                const secFieldsDiv = document.getElementById('customSecretaryFields');
+                                const customSecInputs = document.querySelectorAll('.sec-field');
+                                const labelOnlineBR = document.getElementById('label-onlinebr');
+                                const labelSomeoneElse = document.getElementById('label-someoneelse');
+
+                                if (radios.length > 0) {
+                                    radios.forEach(r => {
+                                        r.addEventListener('change', function() {
+                                            if (this.value === 'Other') {
+                                                secFieldsDiv.style.display = 'block';
+                                                labelSomeoneElse.style.border = '2px solid var(--brand-primary)';
+                                                labelSomeoneElse.style.background = '#f0fdf4';
+                                                labelOnlineBR.style.border = '1px solid #e2e8f0';
+                                                labelOnlineBR.style.background = '#f8fafc';
+                                                customSecInputs.forEach(input => input.required = true);
+                                            } else {
+                                                secFieldsDiv.style.display = 'none';
+                                                labelOnlineBR.style.border = '2px solid var(--brand-primary)';
+                                                labelOnlineBR.style.background = '#f0fdf4';
+                                                labelSomeoneElse.style.border = '1px solid #e2e8f0';
+                                                labelSomeoneElse.style.background = '#f8fafc';
+                                                customSecInputs.forEach(input => {
+                                                    input.required = false;
+                                                    input.value = ''; // clear on hide
+                                                });
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        </script>
+                    </div>
+
+                    <!-- STEP 8: Final Review & Documents -->
+                    <div class="form-step" id="step-8">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="step-indicator-badge me-3">8</div>
+                            <h4 class="h5 fw-800 mb-0" style="color: var(--brand-primary);">Final Review &amp; Documents</h4>
+                        </div>
+                        
+                        <div class="world-class-card p-4 text-center">
+                            <i class="bi bi-file-earmark-pdf" style="font-size: 3rem; color: #ef4444;"></i>
+                            <h5 class="fw-800 mt-3" style="color: var(--brand-primary);">Articles of Association</h5>
+                            <p class="text-muted small mb-4">Before submitting your application, generate and preview the legal Articles of Association.</p>
+
+                            <button type="button" id="previewAoaBtn" class="btn btn-outline-danger btn-lg px-4 py-2" style="font-weight: 700; border-radius: 12px; border-width: 2px;">
+                                <i class="bi bi-magic me-2"></i> Generate &amp; Preview PDF
+                            </button>
+
+                            <!-- Loading Spinner -->
+                            <div id="pdfLoader" class="d-none mt-4">
+                                <div class="spinner-border text-danger" role="status"></div>
+                                <p class="mt-2 fw-bold text-muted">Generating Official Document...</p>
+                            </div>
+
+                            <!-- Success Card -->
+                            <div id="pdfSuccessCard" class="d-none mt-4 p-4 rounded-4" style="background: #f0fdf4; border: 2px solid #22c55e;">
+                                <i class="bi bi-check-circle-fill" style="font-size: 2rem; color: #22c55e;"></i>
+                                <h6 class="fw-800 mt-2" style="color: #166534;">AOA Successfully Generated!</h6>
+                                <p class="text-muted small mb-3">Your Articles of Association has been created. Click below to view or download it.</p>
+                                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                    <a id="pdfViewLink" href="#" target="_blank" class="btn btn-danger px-4" style="font-weight: 700; border-radius: 10px;">
+                                        <i class="bi bi-eye me-2"></i> View PDF
+                                    </a>
+                                    <a id="pdfDownloadLink" href="#" download="ArticlesOfAssociation.pdf" class="btn btn-outline-danger px-4" style="font-weight: 700; border-radius: 10px;">
+                                        <i class="bi bi-download me-2"></i> Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <a asp-action="SearchName" class="text-muted text-decoration-none fw-700" id="backLink">
+                            <i class="bi bi-arrow-left me-2"></i> Back to Search
+                        </a>
+                        <button type="button" class="btn btn-outline-secondary btn-lg px-4 py-3 d-none" id="prevBtn">
+                            <i class="bi bi-chevron-left me-1"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-premium btn-lg px-5 py-3 shadow-accent" id="nextBtn">
+                            Next Step <i class="bi bi-chevron-right ms-2"></i>
+                        </button>
+                        <button type="submit" class="btn btn-premium btn-lg px-5 py-3 shadow-accent d-none" id="submitBtn">
+                            Confirm Reservation <i class="bi bi-check2-all ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+                <div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; pointer-events: none;"></div>
+
+                <script>
+                    function showToast(message, type = 'danger') {
+                        const container = document.getElementById("toast-container");
+                        if (!container) return;
+                        
+                        const toast = document.createElement("div");
+                        toast.className = `toast-premium ${type} shadow-premium`;
+                        toast.style.cssText = "background: #1e293b; color: white; padding: 14px 20px; border-radius: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px; animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; pointer-events: auto; border: 1px solid rgba(255,255,255,0.1);";
+                        
+                        if (type === 'danger') {
+                            toast.style.borderLeft = "4px solid #ef4444";
+                        }
+                        
+                        toast.innerHTML = `<i class="bi bi-exclamation-circle-fill" style="color: #ef4444; font-size: 1.2rem;"></i> <span>${message}</span>`;
+                        container.appendChild(toast);
+                        
+                        setTimeout(() => {
+                            toast.style.opacity = '0';
+                            toast.style.transform = 'translateY(-10px)';
+                            setTimeout(() => toast.remove(), 300);
+                        }, 4000);
+                    }
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        let currentStep = 1;
+                        const totalSteps = 8;
+                        
+                        const steps = document.querySelectorAll(".form-step");
+                        const prevBtn = document.getElementById("prevBtn");
+                        const nextBtn = document.getElementById("nextBtn");
+                        const submitBtn = document.getElementById("submitBtn");
+                        const backLink = document.getElementById("backLink");
+                        const consent = document.getElementById("consent");
+
+                        // Searchable Districts
+                        const districtSearch = document.getElementById("DistrictSearch");
+                        const districtOptions = document.getElementById("DistrictOptions");
+                        const districtHidden = document.getElementById("District");
+
+                        if (districtSearch && districtOptions) {
+                            let districtsList = [];
+
+                            fetch('/data/districts.json')
+                                .then(response => response.json())
+                                .then(districts => {
+                                    districtsList = districts;
+                                })
+                                .catch(err => console.error("Error loading districts:", err));
+
+                            function populateOptions(items) {
+                                districtOptions.innerHTML = "";
+                                if (items.length === 0) {
+                                    districtOptions.innerHTML = "<li class='text-muted small p-3'>No districts found</li>";
+                                    return;
+                                }
+                                items.forEach(district => {
+                                    const li = document.createElement("li");
+                                    li.textContent = district;
+                                    li.style.cssText = "padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #0f172a; list-style: none; transition: background 0.2s;";
+                                    li.addEventListener("mouseover", () => li.style.background = "#f1f5f9");
+                                    li.addEventListener("mouseout", () => li.style.background = "transparent");
+                                    li.addEventListener("click", () => {
+                                        districtSearch.value = district;
+                                        districtHidden.value = district;
+                                        districtOptions.classList.add("d-none");
+                                        districtSearch.classList.remove("is-invalid");
+                                    });
+                                    districtOptions.appendChild(li);
+                                });
+                            }
+
+                            districtSearch.addEventListener("input", function () {
+                                const query = this.value.toLowerCase();
+                                const filtered = districtsList.filter(d => d.toLowerCase().includes(query));
+                                populateOptions(filtered);
+                                districtOptions.classList.remove("d-none");
+                            });
+
+                            document.getElementById("toggleDistricts").addEventListener("click", () => {
+                                populateOptions(districtsList);
+                                districtOptions.classList.toggle("d-none");
+                            });
+
+                            districtSearch.addEventListener("focus", () => {
+                                populateOptions(districtsList);
+                                districtOptions.classList.remove("d-none");
+                            });
+
+                            document.addEventListener("click", (e) => {
+                                if (!districtSearch.contains(e.target) && !districtOptions.contains(e.target) && e.target.id !== "toggleDistricts") {
+                                    districtOptions.classList.add("d-none");
+                                }
+                            });
+                        }
+
+                        const stepTitles = [
+                            "Multilingual Identity", "Company Address", "Objectives",
+                            "Directors", "Capital & Shares", "Shareholders",
+                            "Secretary", "Review & AOA"
+                        ];
+
+                        function updateStep() {
+                            steps.forEach((step, index) => {
+                                step.classList.toggle("active", index + 1 === currentStep);
+                            });
+
+                            // Update Progress Bar
+                            const progressFill = document.getElementById("progressFill");
+                            const stepCounter = document.getElementById("stepCounter");
+                            const stepTitle = document.getElementById("stepTitle");
+                            if (progressFill) progressFill.style.width = `${(currentStep / totalSteps) * 100}%`;
+                            if (stepCounter) stepCounter.textContent = `Step ${currentStep} of ${totalSteps}`;
+                            if (stepTitle) stepTitle.textContent = stepTitles[currentStep - 1] || "";
+
+                            // Handle buttons
+                            if (currentStep === 1) {
+                                backLink.classList.remove("d-none");
+                                prevBtn.classList.add("d-none");
+                                nextBtn.classList.remove("d-none");
+                                submitBtn.classList.add("d-none");
+                            } else {
+                                backLink.classList.add("d-none");
+                                prevBtn.classList.remove("d-none");
+                                
+                                if (currentStep === totalSteps) {
+                                    nextBtn.classList.add("d-none");
+                                    submitBtn.classList.remove("d-none");
+                                } else {
+                                    nextBtn.classList.remove("d-none");
+                                    submitBtn.classList.add("d-none");
+                                }
+                            }
+                        }
+
+                        nextBtn.addEventListener("click", function () {
+                            // Basic validation for Step 1
+                            if (currentStep === 1) {
+                                if (!consent.checked) {
+                                    showToast("Please authorize the search to proceed.");
+                                    return;
+                                }
+                            } else {
+                                // Validate required fields in current step
+                                const activeStep = document.querySelector(".form-step.active");
+                                const inputs = activeStep.querySelectorAll("input[required], textarea[required]");
+                                let valid = true;
+                                
+                                inputs.forEach(input => {
+                                    if (!input.value.trim()) {
+                                        valid = false;
+                                        input.classList.add("is-invalid");
+                                    } else {
+                                        input.classList.remove("is-invalid");
+                                    }
+                                });
+
+                                if (!valid) {
+                                    showToast("Please fill in all required fields.");
+                                    return;
+                                }
+                            }
+
+                            if (currentStep < totalSteps) {
+                                currentStep++;
+                                updateStep();
+                            }
+                        });
+
+                        prevBtn.addEventListener("click", function () {
+                            if (currentStep > 1) {
+                                currentStep--;
+                                updateStep();
+                            }
+                        });
+
+                        // Dynamic Objectives
+                        const objectiveInput = document.getElementById("ObjectiveInput");
+                        const addObjectiveBtn = document.getElementById("addObjectiveBtn");
+                        const objectivesList = document.getElementById("objectivesList");
+                        const objectivesHidden = document.getElementById("Objectives");
+                        let objectivesArray = [];
+
+                        function updateObjectives() {
+                            if (!objectivesList) return;
+                            objectivesList.innerHTML = "";
+                            objectivesArray.forEach((obj, index) => {
+                                const li = document.createElement("li");
+                                li.className = "objective-item";
+                                li.style.cssText = "background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; animation: fadeIn 0.3s ease-out;";
+                                li.innerHTML = `
+                                    <div class="d-flex align-items-center" style="gap: 12px; flex: 1; min-width: 0;">
+                                        <span class="badge" style="background: rgba(59, 130, 246, 0.1); color: var(--brand-accent); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; border-radius: 50%; font-weight: 800; flex-shrink: 0;">${index + 1}</span>
+                                        <span class="fw-700" style="color: #0f172a; font-size: 0.95rem; word-wrap: anywhere; flex: 1; text-align: left;">${obj}</span>
+                                    </div>
+                                    <i class="bi bi-trash-fill delete-objective-btn" data-index="${index}" style="color: #ef4444; cursor: pointer; padding: 6px; border-radius: 8px; font-size: 1.1rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.08)'" onmouseout="this.style.background='transparent'"></i>
+                                `;
+                                objectivesList.appendChild(li);
+                            });
+
+                            // Join with ". " for mapping
+                            objectivesHidden.value = objectivesArray.join(". ");
+                            
+                            // Bind delete buttons
+                            document.querySelectorAll(".delete-objective-btn").forEach(btn => {
+                                btn.addEventListener("click", function() {
+                                    const idx = parseInt(this.getAttribute("data-index"));
+                                    objectivesArray.splice(idx, 1);
+                                    updateObjectives();
+                                });
+                            });
+                        }
+
+                        function handleAddObjective() {
+                            const val = objectiveInput.value.trim();
+                            if (val) {
+                                objectivesArray.push(val);
+                                objectiveInput.value = "";
+                                updateObjectives();
+                            }
+                        }
+
+                        if (addObjectiveBtn && objectiveInput) {
+                            addObjectiveBtn.addEventListener("click", handleAddObjective);
+                            objectiveInput.addEventListener("keydown", (e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleAddObjective();
+                                }
+                            });
+                        }
+
+                        // Directors Management
+                        const addDirectorBtn = document.getElementById("addDirectorBtn");
+                        const directorsList = document.getElementById("directorsList");
+                        const directorTemplate = document.getElementById("directorTemplate");
+                        let directorCount = 0;
+
+                        function addDirector() {
+                            const index = directorCount++;
+                            let html = directorTemplate.innerHTML;
+                            // Replace all INDEX with index
+                            html = html.replace(/INDEX/g, index);
+                            html = html.replace(/NUMBER/g, index + 1);
+
+                            const div = document.createElement("div");
+                            div.innerHTML = html;
+                            const card = div.firstElementChild;
+                            
+                            // Bind remove button
+                            const removeBtn = card.querySelector(".remove-director-btn");
+                            if (removeBtn) {
+                                removeBtn.addEventListener("click", function() {
+                                    card.remove();
+                                });
+                            }
+
+                            directorsList.appendChild(card);
+                        }
+
+                        if (addDirectorBtn && directorsList && directorTemplate) {
+                            addDirectorBtn.addEventListener("click", addDirector);
+                        }
+
+                        const addSampleDirectorBtn = document.getElementById("addSampleDirectorBtn");
+                        if (addSampleDirectorBtn) {
+                            addSampleDirectorBtn.addEventListener("click", function() {
+                                addDirector();
+                                const cards = directorsList.querySelectorAll('.director-card');
+                                const lastCard = cards[cards.length - 1];
+                                if (!lastCard) return;
+
+                                const nicStr = '19' + Math.floor(Math.random() * 90000000 + 10000000) + 'V';
+                                const inputs = {
+                                    'NIC': nicStr,
+                                    'Title': 'Mr',
+                                    'FirstNames': 'Sample ' + Math.floor(Math.random() * 1000),
+                                    'Surname': 'Director',
+                                    'DateOfBirth': '1980-05-15',
+                                    'District': 'Colombo',
+                                    'DivisionalSecretariatDivision': 'Thimbirigasyaya',
+                                    'Address': '123 Test Street, Colombo 03',
+                                    'PostalCode': '00300',
+                                    'ResidencePhoneNumber': '0112345678',
+                                    'MobileNumber': '0771234567',
+                                    'EmailAddress': 'sample' + Math.floor(Math.random() * 1000) + '@@director.com',
+                                    'Occupation': 'Business Executive'
+                                };
+                                
+                                for (const [key, value] of Object.entries(inputs)) {
+                                    const el = lastCard.querySelector(`[name$='.${key}']`);
+                                    if (el) el.value = value;
+                                }
+                                
+                                showToast("Sample Director Added Automatically");
+                            });
+                        }
+
+                        // Shareholders Management
+                        const shareholdersList = document.getElementById("shareholdersList");
+                        const shareholderTemplate = document.getElementById("shareholderTemplate");
+                        let shareholderCount = 0;
+
+                        window.addShareholder = function() {
+                            const index = shareholderCount++;
+                            let html = shareholderTemplate.innerHTML;
+                            // Replace all INDEX with index
+                            html = html.replace(/INDEX/g, index);
+                            html = html.replace(/NUMBER/g, index + 1);
+
+                            const div = document.createElement("div");
+                            div.innerHTML = html;
+                            const card = div.firstElementChild;
+                            
+                            // Bind remove button
+                            const removeBtn = card.querySelector(".remove-shareholder-btn");
+                            if (removeBtn) {
+                                removeBtn.addEventListener("click", function() {
+                                    card.remove();
+                                });
+                            }
+
+                            if (shareholdersList) {
+                                shareholdersList.appendChild(card);
+                            }
+                        };
+
+                        // Form Submit Validation for Directors
+                        const form = document.getElementById("registrationForm");
+                        if (form) {
+                            form.addEventListener("submit", function(e) {
+                                // 1. Validate Directors Count
+                                if (directorsList.children.length === 0) {
+                                    e.preventDefault();
+                                    showToast("Please add at least one director.");
+                                    return;
+                                }
+
+                                // 2. Validate all required fields in the current step (Directors or Capital)
+                                const activeStep = document.querySelector(".form-step.active");
+                                if (activeStep) {
+                                    const inputs = activeStep.querySelectorAll("input[required], select[required], textarea[required]");
+                                    let valid = true;
+
+                                    inputs.forEach(input => {
+                                        if (!input.value.trim()) {
+                                            valid = false;
+                                            input.classList.add("is-invalid");
+                                        } else {
+                                            input.classList.remove("is-invalid");
+                                        }
+                                    });
+
+                                    if (!valid) {
+                                        e.preventDefault();
+                                        showToast("Please fill in all required fields.");
+                                    }
+                                }
+                            });
+                        }
+
+                        // Shareholders & Capital Logic
+                        const makeDirectorsShareholders = document.getElementById("makeDirectorsShareholders");
+                        const directorsShareAllocation = document.getElementById("directorsShareAllocation");
+                        const directorsShareList = document.getElementById("directorsShareList");
+
+                        function populateDirectorsShares() {
+                            if (!directorsShareList) return;
+                            directorsShareList.innerHTML = "";
+                            const cards = directorsList.querySelectorAll(".director-card");
+                            
+                            if (cards.length === 0) {
+                                directorsShareList.innerHTML = "<p class='text-muted small p-2'>No directors added yet in previous step.</p>";
+                                return;
+                            }
+
+                            cards.forEach(card => {
+                                const nicInput = card.querySelector("input[name*='.NIC']");
+                                const firstNamesInput = card.querySelector("input[name*='.FirstNames']");
+                                const surnameInput = card.querySelector("input[name*='.Surname']");
+
+                                if (!nicInput) return;
+
+                                const nameMatch = nicInput.name.match(/Directors\[(\d+)\]/);
+                                if (!nameMatch) return;
+                                const index = nameMatch[1];
+
+                                const firstName = firstNamesInput ? firstNamesInput.value : "";
+                                const surname = surnameInput ? surnameInput.value : "";
+                                const displayName = (firstName + " " + surname).trim() || `Director #${parseInt(index) + 1}`;
+
+                                const row = document.createElement("div");
+                                row.className = "d-flex justify-content-between align-items-center p-3 shadow-premium";
+                                row.style.cssText = "background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; animation: fadeIn 0.3s ease-out;";
+                                row.innerHTML = `
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="form-check form-switch mb-0">
+                                            <input class="form-check-input director-shareholder-toggle" type="checkbox" id="check_${index}" checked style="width: 32px; height: 16px;">
+                                        </div>
+                                        <div class="fw-700" style="color: #0f172a; font-size: 0.95rem;">${displayName}</div>
+                                    </div>
+                                    <input type="hidden" id="IsShareholder_${index}" name="Directors[${index}].IsShareholder" value="true" />
+                                    <div style="width: 140px;" id="sharesContainer_${index}">
+                                        <input type="number" id="Shares_${index}" name="Directors[${index}].NumberOfShares" class="premium-input py-2" placeholder="Shares" required min="1" />
+                                    </div>
+                                `;
+
+                                directorsShareList.appendChild(row);
+
+                                const toggle = row.querySelector(".director-shareholder-toggle");
+                                const hidden = row.querySelector(`#IsShareholder_${index}`);
+                                const sharesInput = row.querySelector(`#Shares_${index}`);
+                                const sharesContainer = row.querySelector(`#sharesContainer_${index}`);
+
+                                if (toggle && hidden && sharesInput && sharesContainer) {
+                                    toggle.addEventListener("change", function() {
+                                        if (this.checked) {
+                                            hidden.value = "true";
+                                            sharesInput.disabled = false;
+                                            sharesInput.required = true;
+                                            sharesContainer.style.opacity = "1";
+                                        } else {
+                                            hidden.value = "false";
+                                            sharesInput.disabled = true;
+                                            sharesInput.required = false;
+                                            sharesInput.value = ""; 
+                                            sharesContainer.style.opacity = "0.5";
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+                        if (makeDirectorsShareholders) {
+                            makeDirectorsShareholders.addEventListener("change", function() {
+                                if (this.checked) {
+                                    directorsShareAllocation.classList.remove("d-none");
+                                    populateDirectorsShares();
+                                } else {
+                                    directorsShareAllocation.classList.add("d-none");
+                                    directorsShareList.innerHTML = "";
+                                }
+                            });
+                        }
+
+                        // Trigger update of step trigger on navigation
+                        const originalUpdateStep = updateStep;
+                        updateStep = function() {
+                            originalUpdateStep();
+                            if (currentStep === 6 && makeDirectorsShareholders && makeDirectorsShareholders.checked) {
+                                populateDirectorsShares();
+                            }
+                        };
+
+                        // PDF Preview Logic
+                        const previewAoaBtn = document.getElementById("previewAoaBtn");
+                        const pdfLoader = document.getElementById("pdfLoader");
+                        const pdfSuccessCard = document.getElementById("pdfSuccessCard");
+                        const pdfViewLink = document.getElementById("pdfViewLink");
+                        const pdfDownloadLink = document.getElementById("pdfDownloadLink");
+
+                        if (previewAoaBtn) {
+                            previewAoaBtn.addEventListener("click", async function() {
+                                updateShareholdersInput();
+                                const formEl = document.getElementById("registrationForm");
+                                const formData = new FormData(formEl);
+
+                                pdfLoader.classList.remove("d-none");
+                                pdfSuccessCard.classList.add("d-none");
+                                previewAoaBtn.disabled = true;
+
+                                try {
+                                    const response = await fetch('/Business/PreviewAoa', {
+                                        method: 'POST',
+                                        body: formData
+                                    });
+
+                                    if (response.ok) {
+                                        const blob = await response.blob();
+                                        const url = URL.createObjectURL(blob);
+                                        pdfViewLink.href = url;
+                                        pdfDownloadLink.href = url;
+                                        pdfLoader.classList.add("d-none");
+                                        pdfSuccessCard.classList.remove("d-none");
+                                    } else {
+                                        pdfLoader.classList.add("d-none");
+                                        showToast("Failed to generate PDF. Make sure all required fields are filled.");
+                                    }
+                                } catch (error) {
+                                    console.error(error);
+                                    pdfLoader.classList.add("d-none");
+                                    showToast("An error occurred while generating the preview.");
+                                } finally {
+                                    previewAoaBtn.disabled = false;
+                                }
+                            });
+                        }
+                        function updateShareholdersInput() {
+                            const hiddenInput = document.getElementById("ShareholdersHidden");
+                            if (hiddenInput) {
+                                hiddenInput.value = JSON.stringify(shareholdersArray);
+                            }
+                        }
+                    });
+                </script>
+
+                <!-- EDIT MODE PRE-POPULATOR -->
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const modelJson = `@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model, new System.Text.Json.JsonSerializerOptions { ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles }))`;
+                        if (!modelJson || modelJson === "null") return;
+                        
+                        try {
+                            const data = JSON.parse(modelJson);
+                            // If Id is empty guid, it's a new registration
+                            if (!data.Id || data.Id === "00000000-0000-0000-0000-000000000000") return;
+
+                            console.log("Edit Mode Data:", data);
+
+                            // Inject hidden ID to update instead of insert
+                            document.getElementById("registrationForm").insertAdjacentHTML("afterbegin", 
+                                `<input type="hidden" name="Id" value="${data.Id}" />`);
+
+                            // Basic Fields mapping
+                            const fieldMap = {
+                                "SinhalaName": data.SinhalaName,
+                                "TamilName": data.TamilName,
+                                "Abbreviations": data.Abbreviations,
+                                "Address": data.Address,
+                                "District": data.District,
+                                "DivisionalSecretariatDivision": data.DivisionalSecretariatDivision,
+                                "GNDivision": data.GNDivision,
+                                "PostalCode": data.PostalCode,
+                                "CompanyEmail": data.CompanyEmail,
+                                "CompanyPhoneNumber": data.CompanyPhoneNumber,
+                                "TotalCapital": data.TotalCapital,
+                                "ObjectiveInput": "" // Objectives are handled separately
+                            };
+
+                            for (const [id, value] of Object.entries(fieldMap)) {
+                                const el = document.getElementById(id);
+                                if (el && value != null) {
+                                    el.value = value;
+                                    // For district search specific field
+                                    if (id === "District") {
+                                        const ds = document.getElementById("DistrictSearch");
+                                        if (ds) ds.value = value;
+                                    }
+                                }
+                            }
+
+                            // Objectives
+                            if (data.Objectives) {
+                                const btn = document.getElementById("addObjectiveBtn");
+                                const objInput = document.getElementById("ObjectiveInput");
+                                if (btn && objInput) {
+                                    const objs = data.Objectives.split('\n').filter(o => o.trim());
+                                    objs.forEach(o => {
+                                        objInput.value = o;
+                                        btn.click();
+                                    });
+                                }
+                            }
+
+                            // Directors
+                            if (data.Directors && data.Directors.length > 0) {
+                                const addDirBtn = document.getElementById("addDirectorBtn");
+                                if (addDirBtn) {
+                                    data.Directors.forEach(dir => {
+                                        addDirBtn.click(); // Spawns a new director block
+                                        
+                                        // The latest block added is the last .director-card
+                                        const cards = document.querySelectorAll(".director-card");
+                                        if (cards.length > 0) {
+                                            const lastCard = cards[cards.length - 1];
+                                            const inputs = lastCard.querySelectorAll("input, select");
+                                            
+                                            inputs.forEach(input => {
+                                                const nameAttr = input.getAttribute("name");
+                                                if (!nameAttr) return;
+                                                const propNameMatch = nameAttr.match(/\.(.+)$/);
+                                                if (propNameMatch && propNameMatch[1]) {
+                                                    const propName = propNameMatch[1];
+                                                    if (dir[propName] !== undefined && dir[propName] !== null) {
+                                                        if (input.type === "date") {
+                                                            input.value = dir[propName].split("T")[0];
+                                                        } else if (input.type === "checkbox") {
+                                                            input.checked = dir[propName];
+                                                            // manually toggle the share container if shareholder
+                                                            if (propName === "IsShareholder" && dir[propName]) {
+                                                                input.dispatchEvent(new Event('change'));
+                                                            }
+                                                        } else {
+                                                            input.value = dir[propName];
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+
+                            // Shareholders (Non-Director)
+                            if (data.Shareholders && data.Shareholders.length > 0) {
+                                const addShBtn = document.getElementById("addShareholderBtn");
+                                if (addShBtn) {
+                                    data.Shareholders.forEach(sh => {
+                                        addShBtn.click();
+                                        const cards = document.querySelectorAll(".shareholder-card");
+                                        if (cards.length > 0) {
+                                            const lastCard = cards[cards.length - 1];
+                                            const inputs = lastCard.querySelectorAll("input, select");
+                                            inputs.forEach(input => {
+                                                const nameAttr = input.getAttribute("name");
+                                                if (!nameAttr) return;
+                                                const propNameMatch = nameAttr.match(/\.(.+)$/);
+                                                if (propNameMatch && propNameMatch[1]) {
+                                                    const propName = propNameMatch[1];
+                                                    if (sh[propName] !== undefined && sh[propName] !== null) {
+                                                        input.value = sh[propName];
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+
+                            // Secretary
+                            if (data.Secretary) {
+                                const secRadios = document.querySelectorAll('.secretary-type-radio');
+                                if (secRadios.length > 0) {
+                                    secRadios.forEach(r => {
+                                        if (r.value === data.Secretary.SecretaryType) {
+                                            r.checked = true;
+                                            r.dispatchEvent(new Event('change'));
+                                        }
+                                    });
+                                }
+                                
+                                if (data.Secretary.SecretaryType === "Other") {
+                                    const secFieldsDiv = document.getElementById('customSecretaryFields');
+                                    if (secFieldsDiv) {
+                                        const inputs = secFieldsDiv.querySelectorAll("input, select, textarea");
+                                        inputs.forEach(input => {
+                                            const nameAttr = input.getAttribute("name");
+                                            if (!nameAttr) return;
+                                            const propNameMatch = nameAttr.match(/\.(.+)$/);
+                                            if (propNameMatch && propNameMatch[1]) {
+                                                const propName = propNameMatch[1];
+                                                if (data.Secretary[propName] !== undefined && data.Secretary[propName] !== null) {
+                                                    input.value = data.Secretary[propName];
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                        } catch(e) { console.error("Could not parse Model JSON", e); }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-step { display: none; }
+    .form-step.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .is-invalid { border-color: #ef4444 !important; background-color: #fef2f2 !important; }
+    
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-arrow-icon {
+        position: absolute;
+        right: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        cursor: pointer;
+        z-index: 10;
+    }
+    .shadow-premium { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+
+    @@keyframes slideIn {
+        from { transform: translateX(100%) scale(0.9); opacity: 0; }
+        to { transform: translateX(0) scale(1); opacity: 1; }
+    }
+
+    :root {
+        --brand-primary: #0f172a;
+        --brand-accent: #3b82f6;
+        --border-light: #e2e8f0;
+        --text-muted: #64748b;
+    }
+    .bg-soft-blue { background: #eff6ff; }
+    .shadow-accent { box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3); }
+    
+    .form-group-premium .premium-label {
+        display: block;
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+        color: var(--brand-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .input-wrapper { position: relative; }
+
+    .input-icon {
+        display: none;
+    }
+    
+    .premium-input {
+        width: 100%;
+        background: #f1f5f9;
+        border: 2px solid transparent;
+        border-radius: 14px;
+        padding: 0.9rem 1.2rem;
+        font-weight: 600;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--brand-primary);
+    }
+
+    .premium-input:focus {
+        background: #fff;
+        border-color: var(--brand-accent);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+</style>

@@ -1,0 +1,261 @@
+@model BusinessRegistrationSystem.Models.BusinessRegistration
+@{
+    ViewData["Title"] = "View Application";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="display-5 fw-800 mb-2" style="color: var(--brand-primary);">@Model.ReservationName.ToUpper()</h1>
+            <p class="text-muted lead fw-500 mb-0">Application ID: <span class="fw-700">@Model.Id</span></p>
+        </div>
+        <div class="text-end">
+            <div class="badge bg-soft-primary text-primary px-4 py-2 rounded-pill fw-800 uppercase mb-2" style="font-size: 0.85rem; letter-spacing: 0.1em;">
+                <i class="bi bi-clock-history me-2"></i> @Model.Status
+            </div>
+            <p class="text-muted small fw-600 mb-0">Submitted: @Model.SubmittedAt.ToString("MMM dd, yyyy hh:mm tt")</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Basic Info -->
+        <div class="col-lg-6">
+            <div class="world-class-card p-5 h-100">
+                <h3 class="h5 fw-800 mb-4 pb-3 border-bottom" style="color: var(--brand-accent);">Basic Information</h3>
+                
+                <div class="mb-4">
+                    <label class="d-block small text-muted fw-700 uppercase mb-1">Proposed Name</label>
+                    <div class="fw-800 fs-5">@Model.ReservationName</div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="d-block small text-muted fw-700 uppercase mb-1">Total Capital</label>
+                    <div class="fw-800 fs-5">@((Model.TotalCapital ?? 0).ToString("C", new System.Globalization.CultureInfo("en-LK")))</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="col-lg-6">
+            <div class="world-class-card p-5 h-100">
+                <h3 class="h5 fw-800 mb-4 pb-3 border-bottom" style="color: var(--brand-accent);">Contact Information</h3>
+                
+                <div class="mb-4">
+                    <label class="d-block small text-muted fw-700 uppercase mb-1">Email Address</label>
+                    <div class="fw-800 fs-5">@Model.CompanyEmail</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="d-block small text-muted fw-700 uppercase mb-1">Phone Number</label>
+                    <div class="fw-800 fs-5">@Model.CompanyPhoneNumber</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Objectives -->
+    <div class="world-class-card p-5 mb-5">
+        <h3 class="h5 fw-800 mb-4 pb-3 border-bottom" style="color: var(--brand-accent);">Main Business Objectives</h3>
+        <ul class="list-group list-group-flush fs-5 fw-600">
+            @if (string.IsNullOrEmpty(Model.Objectives))
+            {
+                <li class="list-group-item text-muted border-0 ps-0">No objectives provided.</li>
+            }
+            else
+            {
+                var objectives = Model.Objectives.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+                foreach (var obj in objectives)
+                {
+                    <li class="list-group-item border-0 ps-0 d-flex align-items-start py-3">
+                        <i class="bi bi-check-circle-fill text-success mt-1 me-3"></i>
+                        <span>@obj</span>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    <!-- Directors -->
+    <div class="world-class-card p-5 mb-5">
+        <h3 class="h5 fw-800 mb-4 pb-3 border-bottom" style="color: var(--brand-accent);">Directors (@Model.Directors?.Count)</h3>
+        
+        @if (Model.Directors != null && Model.Directors.Any())
+        {
+            <div class="row g-4">
+                @foreach (var director in Model.Directors)
+                {
+                    <div class="col-md-6">
+                        <div class="p-4" style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 16px;">
+                            <h4 class="h6 fw-800 mb-3" style="color: var(--brand-primary);">@director.Title @director.FirstNames @director.Surname</h4>
+                            
+                            <div class="row g-2 small">
+                                <div class="col-5 text-muted fw-700">NIC</div>
+                                <div class="col-7 fw-600">@director.NIC</div>
+                                
+                                <div class="col-5 text-muted fw-700">DOB</div>
+                                <div class="col-7 fw-600">@director.DateOfBirth.ToString("MMM dd, yyyy")</div>
+                                
+                                <div class="col-5 text-muted fw-700">Email</div>
+                                <div class="col-7 fw-600">@director.EmailAddress</div>
+                                
+                                <div class="col-5 text-muted fw-700">Phone</div>
+                                <div class="col-7 fw-600">@director.MobileNumber</div>
+                                
+                                <div class="col-5 text-muted fw-700">Occupation</div>
+                                <div class="col-7 fw-600">@director.Occupation</div>
+                                
+                                <div class="col-5 text-muted fw-700">Address</div>
+                                <div class="col-7 fw-600">@director.Address, @director.District</div>
+                                
+                                @if(director.IsShareholder)
+                                {
+                                    <div class="col-12 mt-2 pt-2 border-top">
+                                        <span class="badge bg-soft-green text-success fw-800 px-2 py-1">Shareholder</span>
+                                        <span class="fw-800 text-dark ms-2">@director.NumberOfShares Shares</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted fw-600 mb-0">No directors listed.</p>
+        }
+    </div>
+
+    <!-- Non-Director Shareholders -->
+    @if (Model.Shareholders != null && Model.Shareholders.Any())
+    {
+    <div class="world-class-card p-5 mb-5">
+        <h3 class="h5 fw-800 mb-4 pb-3 border-bottom" style="color: var(--brand-accent);">Non-Director Shareholders (@Model.Shareholders.Count)</h3>
+        
+        <div class="row g-4">
+            @foreach (var shareholder in Model.Shareholders)
+            {
+                <div class="col-md-6">
+                    <div class="p-4" style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 16px;">
+                        <h4 class="h6 fw-800 mb-3" style="color: var(--brand-primary);">@shareholder.Title @shareholder.FirstNames @shareholder.Surname</h4>
+                        
+                        <div class="row g-2 small">
+                            <div class="col-5 text-muted fw-700">NIC</div>
+                            <div class="col-7 fw-600">@shareholder.NIC</div>
+                            
+                            <div class="col-5 text-muted fw-700">Address</div>
+                            <div class="col-7 fw-600">@shareholder.Address</div>
+                            
+                            <div class="col-12 mt-2 pt-2 border-top">
+                                <span class="badge bg-soft-blue text-primary fw-800 px-2 py-1">Shareholder</span>
+                                <span class="fw-800 text-dark ms-2">@shareholder.NumberOfShares Shares</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- Secretary Information -->
+    <div class="world-class-card p-5 mb-5">
+        <h3 class="h5 fw-800 mb-4 pb-3 border-bottom" style="color: var(--brand-accent);">Secretary Information</h3>
+        
+        @if (Model.Secretary != null && Model.Secretary.SecretaryType == "Other")
+        {
+            <div class="p-4" style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 16px;">
+                <h4 class="h6 fw-800 mb-3" style="color: var(--brand-primary);">@Model.Secretary.Title @Model.Secretary.FirstNames @Model.Secretary.Surname</h4>
+                
+                <div class="row g-3 small">
+                    <div class="col-md-6 d-flex">
+                        <div class="text-muted fw-700" style="width: 100px;">NIC</div>
+                        <div class="fw-600">@Model.Secretary.NIC</div>
+                    </div>
+                    <div class="col-md-6 d-flex">
+                        <div class="text-muted fw-700" style="width: 100px;">Email</div>
+                        <div class="fw-600">@Model.Secretary.Email</div>
+                    </div>
+                    <div class="col-md-6 d-flex">
+                        <div class="text-muted fw-700" style="width: 100px;">Phone</div>
+                        <div class="fw-600">@Model.Secretary.PhoneNumber</div>
+                    </div>
+                    <div class="col-md-6 d-flex">
+                        <div class="text-muted fw-700" style="width: 100px;">Postal Code</div>
+                        <div class="fw-600">@Model.Secretary.PostalCode</div>
+                    </div>
+                    <div class="col-12 d-flex">
+                        <div class="text-muted fw-700" style="width: 100px;">Address</div>
+                        <div class="fw-600">@Model.Secretary.Address</div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex align-items-center p-4" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 16px;">
+                <div class="icon-sq bg-white text-success me-4 shadow-sm"><i class="bi bi-briefcase-fill h3 mb-0"></i></div>
+                <div>
+                    <h4 class="h6 fw-800 mb-1" style="color: #166534;">Online BR Handled</h4>
+                    <p class="text-success small mb-0 fw-600">The statutory secretarial requirements will be professionally managed by Online BR.</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-between align-items-center mb-5 pb-5">
+        <a asp-controller="Auth" asp-action="LoginSuccess" class="btn btn-outline-secondary btn-lg py-3 px-4 fw-700">
+            <i class="bi bi-arrow-left me-2"></i> Back to Dashboard
+        </a>
+        <a asp-controller="Business" asp-action="EditApplication" asp-route-id="@Model.Id" class="btn btn-premium btn-lg py-3 px-5 shadow-accent">
+            <i class="bi bi-pencil me-2"></i> Edit Application
+        </a>
+    </div>
+</div>
+
+<style>
+    :root {
+        --brand-primary: #0f172a;
+        --brand-accent: #3b82f6;
+        --border-light: #e2e8f0;
+        --apple-text: #1d1d1f;
+    }
+    .fw-800 { font-weight: 800; }
+    .fw-700 { font-weight: 700; }
+    .fw-600 { font-weight: 600; }
+    .fw-500 { font-weight: 500; }
+    .uppercase { text-transform: uppercase; }
+    .bg-soft-primary { background: rgba(59, 130, 246, 0.1); }
+    .bg-soft-green { background: #ecfdf5; }
+    .bg-soft-blue { background: #eff6ff; }
+    
+    .world-class-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 24px 38px -10px rgba(0, 0, 0, 0.08);
+    }
+    
+    .icon-sq {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-premium {
+        background: var(--brand-primary);
+        color: white !important;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s;
+    }
+    .btn-premium:hover {
+        background: #1e293b;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+    }
+</style>
