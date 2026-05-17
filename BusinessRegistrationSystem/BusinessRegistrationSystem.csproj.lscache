@@ -53,9 +53,46 @@ TemporaryDependencyNodeTargetIdentifier=net9.0
 /warnaserror+:NU1605,SYSLIB0011
 
 [sourceFiles]
-Controllers/HomeController.cs
+Controllers/
+ AuthController.cs
+ BusinessController.cs
+ HomeController.cs
+Data/
+ AppDbContext.cs
+ Migrations/
+  20260310072135_AddBusinessRegistration.cs
+  20260310072135_AddBusinessRegistration.Designer.cs
+  20260321082623_AddNewAddressFields.cs
+  20260321082623_AddNewAddressFields.Designer.cs
+  20260322094021_AddBusinessPeople.cs
+  20260322094021_AddBusinessPeople.Designer.cs
+  20260322112736_AddDirectors.cs
+  20260322112736_AddDirectors.Designer.cs
+  20260322124215_MakeOptionalFieldsNullable.cs
+  20260322124215_MakeOptionalFieldsNullable.Designer.cs
+  20260322133201_AddShareholdersAndCapital.cs
+  20260322133201_AddShareholdersAndCapital.Designer.cs
+  20260322134125_AddShareholdersTable.cs
+  20260322134125_AddShareholdersTable.Designer.cs
+  20260324053405_AddSecretaryTable.cs
+  20260324053405_AddSecretaryTable.Designer.cs
+  20260324054102_AddCompanySecretaryTable.cs
+  20260324054102_AddCompanySecretaryTable.Designer.cs
+  20260324154120_AddNatureOfBusiness.cs
+  20260324154120_AddNatureOfBusiness.Designer.cs
+Migrations/
+ 20260302170457_InitialCreate.cs
+ 20260302170457_InitialCreate.Designer.cs
+ 20260302171414_SeedAdmin.cs
+ 20260302171414_SeedAdmin.Designer.cs
+ 20260310065625_InitialPostgresCreate.cs
+ 20260310065625_InitialPostgresCreate.Designer.cs
+ AppDbContextModelSnapshot.cs
 Models/
+ Director.cs
  ErrorViewModel.cs
+ Secretary.cs
+ Shareholder.cs
  User.cs
  UserRole.cs
 obj/Debug/net9.0/
@@ -64,6 +101,12 @@ obj/Debug/net9.0/
  BusinessRegistrationSystem.GlobalUsings.g.cs
  BusinessRegistrationSystem.RazorAssemblyInfo.cs
 Program.cs
+Services/
+ AuthService.cs
+ BusinessService.cs
+ IAuthService.cs
+ IBusinessService.cs
+ PdfGeneratorService.cs
 
 [metadataReferences]
 <DOTNET>/packs/Microsoft.AspNetCore.App.Ref/9.0.13/ref/net9.0/
@@ -420,6 +463,10 @@ Views/Auth/
  Login.cshtml
  LoginSuccess.cshtml
  Register.cshtml
+Views/Business/
+ ReserveName.cshtml
+ SearchName.cshtml
+ ViewApplication.cshtml
 Views/Home/
  Index.cshtml
  Privacy.cshtml
@@ -436,6 +483,10 @@ Views/Auth/
  Login.cshtml
  LoginSuccess.cshtml
  Register.cshtml
+Views/Business/
+ ReserveName.cshtml
+ SearchName.cshtml
+ ViewApplication.cshtml
 Views/Home/
  Index.cshtml
  Privacy.cshtml
